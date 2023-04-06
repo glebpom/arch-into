@@ -21,6 +21,7 @@ pub trait ArchFrom<T>: Sized {
     fn arch_from(value: T) -> Self;
 }
 
+#[allow(unused_macros)]
 macro_rules! define_into {
     ($sized:ty, $size:ty) => {
         impl ArchInto<$sized> for $size {
@@ -46,6 +47,7 @@ macro_rules! define_into {
     };
 }
 
+#[allow(unused_macros)]
 macro_rules! define_conversions {
     ($u:ty, $i:ty) => {
         define_into!($u, usize);

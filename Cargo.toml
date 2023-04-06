@@ -2,8 +2,8 @@
 name = "arch-into"
 version = "0.0.1-alpha.1"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+license = "MIT"
+description = "safe type conversions between pointer-sized types (usize/isize) and types with fixed size"
 
 [dependencies]
 
