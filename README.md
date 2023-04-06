@@ -1,16 +1,16 @@
 # arch-into
 
-This crates provides simplified conversion for usize/isize types, 
-for the list of supported pointer width. 
+This crates provides simplified conversion between `usize`/`isize` types, and types with the defined sized, depending on supported architectures.
 
-Typically, you, when you want to convers usize, to u64/u32 you have few options:
+Typically, when you want to convert `usize` to `u64` (or `u32`) you have few options:
 
 - Use `as` keyword. This approach may lead to incorrect results
-- Use `try_from` with `unwrap`/`expect`. When you target only 64-bits architectures this is fin, but produces a lot of boilerplate code
+- Use `try_from` with `unwrap`/`expect`. When you target only 64-bits architectures this is fine, but produces a lot of boilerplate
 - Use `try_from` and return error. This approach hides misbehavior of your code. 
 
-This crates provides two features: `arch-32` and `arch-64`. It defines the minimum supported architecture. If you try to compile fo unsupported architecture, comiplation will fail with error.\
-Since minimum supported pointer width is defined, we can define safe conversions for types with specific size.
+This crates provides two features: `arch-32` and `arch-64`. It defines the minimum supported architecture. If you try to compile for unsupported architecture, compilation will fail with the error.
+
+Since minimum supported pointer width is defined, we can use safe conversions for types with specific size.
 
 ## Usage
 
