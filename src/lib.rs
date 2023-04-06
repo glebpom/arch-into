@@ -64,3 +64,13 @@ mod arch32 {
         define_conversion!(isize, i64);
     }
 }
+
+define_conversion!(u16, usize);
+define_conversion!(i16, isize);
+define_conversion!(usize, u16);
+define_conversion!(isize, i16);
+
+define_conversion!(u8, usize);
+define_conversion!(i8, isize);
+define_conversion!(usize, u8);
+define_conversion!(isize, i8);
