@@ -1,9 +1,16 @@
 [package]
 name = "arch-into"
-version = "0.0.1-alpha.1"
+version = "0.0.1-alpha.2"
 edition = "2021"
-license = "MIT"
 description = "safe type conversions between pointer-sized types (usize/isize) and types with fixed size"
+keywords = ["conversions", "architecture", "pointer"]
+categories = ["rust-patterns"]
+repository = "https://github.com/glebpom/arch-into"
+documentation = "https://docs.rs/arch-into"
+authors = ["Gleb Pomykalov <glebpom@gmail.com>"]
+readme = "README.md"
+license = "MIT/Apache-2.0"
+autotests = true
 
 [dependencies]
 
