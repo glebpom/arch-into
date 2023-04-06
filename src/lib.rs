@@ -22,41 +22,45 @@ pub trait ArchFrom<T>: Sized {
 }
 
 #[allow(unused_macros)]
-macro_rules! define_into {
-    ($sized:ty, $size:ty) => {
-        impl ArchInto<$sized> for $size {
-            fn arch_into(self) -> $sized {
+macro_rules! define_conversion {
+    ($from:ty, $to:ty) => {
+        impl ArchInto<$to> for $from {
+            fn arch_into(self) -> $to {
                 self.try_into().unwrap()
             }
         }
-        impl ArchInto<$size> for $sized {
-            fn arch_into(self) -> $size {
-                self.try_into().unwrap()
-            }
-        }
-        impl ArchFrom<$sized> for $size {
-            fn arch_from(value: $sized) -> Self {
+        impl ArchFrom<$from> for $to {
+            fn arch_from(value: $from) -> Self {
                 value.try_into().unwrap()
             }
         }
-        impl ArchFrom<$size> for $sized {
-            fn arch_from(value: $size) -> Self {
-                value.try_into().unwrap()
-            }
-        }
-    };
-}
-
-#[allow(unused_macros)]
-macro_rules! define_conversions {
-    ($u:ty, $i:ty) => {
-        define_into!($u, usize);
-        define_into!($i, isize);
     };
 }
 
 #[cfg(feature = "arch-64")]
-define_conversions!(u64, i64);
+mod arch64 {
+    use super::*;
+
+    define_conversion!(u64, usize);
+    define_conversion!(i64, isize);
+    define_conversion!(usize, u64);
+    define_conversion!(isize, i64);
+}
 
 #[cfg(feature = "arch-32")]
-define_conversions!(u32, i32);
+mod arch32 {
+    use super::*;
+
+    define_conversion!(u32, usize);
+    define_conversion!(i32, isize);
+    define_conversion!(usize, u32);
+    define_conversion!(isize, i32);
+
+    #[cfg(not(feature = "arch-64"))]
+    mod non_arch64 {
+        use super::*;
+
+        define_conversion!(usize, u64);
+        define_conversion!(isize, i64);
+    }
+}
