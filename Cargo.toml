@@ -16,5 +16,5 @@ autotests = true
 
 [features]
 default = []
-arch-64 = ["arch-32"]
+arch-64 = []
 arch-32 = []
