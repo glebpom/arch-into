@@ -1,6 +1,6 @@
 [package]
 name = "arch-into"
-version = "0.0.1-alpha.3"
+version = "0.0.1-alpha.4"
 edition = "2021"
 description = "safe type conversions between pointer-sized types (usize/isize) and types with fixed size"
 keywords = ["conversions", "architecture", "pointer"]
