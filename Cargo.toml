@@ -13,6 +13,8 @@ license = "MIT/Apache-2.0"
 autotests = true
 
 [dependencies]
+paste = "1"
+const_panic = "0.2"
 
 [features]
 default = []
