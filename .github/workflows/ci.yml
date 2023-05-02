@@ -105,9 +105,27 @@ jobs:
         with:
           command: test
 
-      - name: arch-32 - 64bit target
-        run: cargo check
+      - name: arch-32 - 64bit target - should fail
+        shell: bash
+        run: |
+          if `cargo check`
+          then
+            exit 1
+          else 
+            exit 0
+          fi
         working-directory: examples/arch-32
+
+      - name: arch-64 - 32bit target - should fail
+        shell: bash
+        run: |
+          if `cargo check --target=wasm32-unknown-unknown`
+          then
+            exit 1
+          else 
+            exit 0
+          fi
+        working-directory: examples/arch-64
 
       - name: arch-32-64 - 64bit target
         run: cargo check
@@ -125,9 +143,6 @@ jobs:
         run: cargo check--target=wasm32-unknown-unknown
         working-directory: examples/arch-32-64
 
-      - name: arch-64 - 32bit target
-        run: cargo check --target=wasm32-unknown-unknown
-        working-directory: examples/arch-64
 
   docs:
     name: Docs
