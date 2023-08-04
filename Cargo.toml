@@ -18,5 +18,5 @@ const_panic = "0.2"
 
 [features]
 default = []
-arch-64 = []
-arch-32 = []
+no-arch-64 = []
+no-arch-32 = []

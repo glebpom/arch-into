@@ -1,19 +1,17 @@
 #[cfg(all(
     target_pointer_width = "64",
-    feature = "arch-32",
-    not(feature = "arch-64")
+    feature = "no-arch-64"
 ))]
 compile_error!(
-    "arch-into is configured to support only 32-bits, but your target architecture is 64-bits"
+    "arch-into is configured to not support 64-bits target"
 );
 
 #[cfg(all(
     target_pointer_width = "32",
-    feature = "arch-64",
-    not(feature = "arch-32")
+    feature = "no-arch-32"
 ))]
 compile_error!(
-    "arch-into is configured to support only 64-bits, but your target architecture is 32-bits"
+    "arch-into is configured to not support 32-bits target"
 );
 
 pub trait ArchInto<T>: Sized {
@@ -67,7 +65,7 @@ macro_rules! define_guaranteed_conversion {
     };
 }
 
-#[cfg(all(feature = "arch-64", feature = "arch-32"))]
+#[cfg(not(any(feature = "no-arch-64", feature = "no-arch-32")))]
 mod conversions_64bits_or_32bits {
     // usize/isize is 32bits or 64bits
 
@@ -83,7 +81,7 @@ mod conversions_64bits_or_32bits {
     define_try_conversion!(i32, isize, i128);
 }
 
-#[cfg(all(feature = "arch-64", not(feature = "arch-32")))]
+#[cfg(all(feature = "no-arch-32", not(feature = "no-arch-64")))]
 mod conversions_only_64bits {
     // usize/isize is always 64bits
 
@@ -102,7 +100,7 @@ mod conversions_only_64bits {
     define_try_conversion!(i32, isize, i128);
 }
 
-#[cfg(all(not(feature = "arch-64"), feature = "arch-32"))]
+#[cfg(all(not(feature = "no-arch-32"), feature = "no-arch-64"))]
 mod conversions_only_32bits {
     use super::*;
 
