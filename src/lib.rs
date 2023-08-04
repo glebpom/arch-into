@@ -1,18 +1,8 @@
-#[cfg(all(
-    target_pointer_width = "64",
-    feature = "no-arch-64"
-))]
-compile_error!(
-    "arch-into is configured to not support 64-bits target"
-);
+#[cfg(all(target_pointer_width = "64", feature = "no-arch-64"))]
+compile_error!("arch-into is configured to not support 64-bits target");
 
-#[cfg(all(
-    target_pointer_width = "32",
-    feature = "no-arch-32"
-))]
-compile_error!(
-    "arch-into is configured to not support 32-bits target"
-);
+#[cfg(all(target_pointer_width = "32", feature = "no-arch-32"))]
+compile_error!("arch-into is configured to not support 32-bits target");
 
 pub trait ArchInto<T>: Sized {
     fn arch_into(self) -> T;
