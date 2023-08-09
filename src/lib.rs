@@ -55,7 +55,7 @@ macro_rules! define_guaranteed_conversion {
     };
 }
 
-#[cfg(not(any(feature = "no-arch-64", feature = "no-arch-32")))]
+#[cfg(all(not(feature = "no-arch-64"), not(feature = "no-arch-32")))]
 mod conversions_64bits_or_32bits {
     // usize/isize is 32bits or 64bits
 
