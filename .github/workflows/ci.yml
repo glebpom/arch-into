@@ -165,7 +165,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: doc
-          args: --no-deps --document-private-items --all-features
+          args: --no-deps --document-private-items
 
   # Separate build job for nightly because of the missing feature for allowed failures at
   # job level. See `jobs.build.strategy.matrix`.

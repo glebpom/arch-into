@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-arch-into = { path = "../..", features = ["arch-32", "arch-64"] }
+arch-into = { path = "../.." }
