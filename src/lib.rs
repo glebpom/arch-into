@@ -1,3 +1,5 @@
+#![doc = include_str!("../README.md")]
+
 #[cfg(all(target_pointer_width = "64", feature = "no-arch-64"))]
 compile_error!("arch-into is configured to not support 64-bits target");
 

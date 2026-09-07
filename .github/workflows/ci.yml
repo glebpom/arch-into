@@ -13,6 +13,7 @@ jobs:
   ci-pass:
     name: CI is green
     runs-on: ubuntu-latest
+    if: ${{ always() }}
     needs:
       - style
       - clippy
@@ -20,7 +21,10 @@ jobs:
       - nightly
       - docs
     steps:
-      - run: exit 0
+      - name: Require every validation job to succeed
+        env:
+          NEEDS_RESULTS: ${{ toJSON(needs.*.result) }}
+        run: jq -e 'length > 0 and all(. == "success")' <<< "$NEEDS_RESULTS"
 
   style:
     name: Check Style
@@ -69,17 +73,16 @@ jobs:
           args: -- -D warnings
 
   test:
-    name: ${{ matrix.name }}
+    name: linux / ${{ matrix.rust }}
     needs: [style]
 
-    runs-on: ${{ matrix.os || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        name:
-          - linux / stable
-          - linux / beta
-          # - linux / nightly
+        rust:
+          - stable
+          - beta
         target:
           - wasm32-unknown-unknown
 
@@ -90,10 +93,13 @@ jobs:
       - name: Install rust
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: ${{ matrix.rust || 'stable' }}
+          toolchain: ${{ matrix.rust }}
           target: ${{ matrix.target }}
           profile: minimal
           override: true
+
+      - name: Install 32-bit runtime test target
+        run: rustup target add i686-unknown-linux-musl
 
       - name: Build
         uses: actions-rs/cargo@v1
@@ -105,13 +111,28 @@ jobs:
         with:
           command: test
 
+      - name: Test 64-bit conversions
+        run: cargo test --features no-arch-32
+
+      - name: Test on a 32-bit target
+        run: cargo test --target=i686-unknown-linux-musl
+
+      - name: Test 32-bit conversions
+        run: cargo test --target=i686-unknown-linux-musl --features no-arch-64
+
+      - name: Check tests on a 32-bit target
+        run: cargo check --tests --target=wasm32-unknown-unknown
+
+      - name: Check 32-bit conversion tests
+        run: cargo check --tests --target=wasm32-unknown-unknown --features no-arch-64
+
       - name: arch-32 - 64bit target - should fail
         shell: bash
         run: |
-          if `cargo check`
+          if cargo check
           then
             exit 1
-          else 
+          else
             exit 0
           fi
         working-directory: examples/arch-32
@@ -119,10 +140,10 @@ jobs:
       - name: arch-64 - 32bit target - should fail
         shell: bash
         run: |
-          if `cargo check --target=wasm32-unknown-unknown`
+          if cargo check --target=wasm32-unknown-unknown
           then
             exit 1
-          else 
+          else
             exit 0
           fi
         working-directory: examples/arch-64
